@@ -12,7 +12,8 @@
 
     <script type="text/javascript" src="../rolling.js"></script>
     <script type="text/javascript">
-        rollingWrite.init(document.getElementById('demo'));
+        var roll = Object.create(rollingWrite);
+        roll.init(document.getElementById('demo'));
     </script>
 </body>
 
