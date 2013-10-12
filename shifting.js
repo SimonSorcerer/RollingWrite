@@ -61,6 +61,9 @@
             if (_repeat || !fullyShifted()) {
                 setTimeout(run, _speed);
             }
+            else {
+                _element.innerText = _text;
+            }
         };
 
         var nextFrame = function() {
