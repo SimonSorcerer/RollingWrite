@@ -1,121 +1,121 @@
-var rollingWrite = (function() {
-    var _text;
-    var _element;
-    var _speed;
-    var _stopMap;
-    var _frame;
+if (typeof Object.prototype.rollingWrite !== 'function') {
+    Object.prototype.rollingWrite = (function() {
+        var _text;
+        var _element;
+        var _speed;
+        var _stopMap;
+        var _frame;
 
-    // methods
-    var isNodeElement = function(elem) {
-        return (elem && elem.nodeType);
-    };
+        // methods
+        var isNodeElement = function(elem) {
+            return (elem && elem.nodeType);
+        };
 
-    var elementDefined = function() {
-        return isNodeElement(_element);
-    };
+        var elementDefined = function() {
+            return isNodeElement(_element);
+        };
 
-    var setElement = function(elem) {
-        if (isNodeElement(elem)) {
-            _element = elem;
-        }
+        var setElement = function(elem) {
+            if (isNodeElement(elem)) {
+                _element = elem;
+            }
 
-        setText();
-    };
+            setText();
+        };
 
-    var setSpeed = function(spd) {
-        _speed = spd || CONFIG.getDefault('speed');
-    };
+        var setSpeed = function(spd) {
+            _speed = spd || CONFIG.getDefault('speed');
+        };
 
-    var setText = function() {
-        _text = (elementDefined() && _element.innerText) ? _element.innerText : CONFIG.getDefault('text');
-    };
+        var setText = function() {
+            _text = (elementDefined() && _element.innerText) ? _element.innerText : CONFIG.getDefault('text');
+        };
 
-    var init = function(element, speed) {
-        setElement(element);
-        setSpeed(speed);
+        var init = function(speed) {
+            setElement(this);
+            setSpeed(speed);
 
-        if (elementDefined()) {
-            createStopMap();
-            _frame = 0;
+            if (elementDefined()) {
+                createStopMap();
+                _frame = 0;
 
-            run();
-        }
-    };
+                run();
+            }
+        };
 
-    var createStopMap = function() {
-        _stopMap = [];
+        var createStopMap = function() {
+            _stopMap = [];
 
-        for (var i = 0; i < _text.length; i++) {
-            _stopMap[i] = Math.floor(Math.random() * CONFIG.getDefault('repetition_offset')) * 20
-                + CONFIG.getDefault('repetitions');
-        }
-    };
+            for (var i = 0; i < _text.length; i++) {
+                _stopMap[i] = Math.floor(Math.random() * CONFIG.getDefault('repetition_offset')) * 20
+                    + CONFIG.getDefault('repetitions');
+            }
+        };
 
-    var run = function() {
-        _element.innerText = nextFrame();
+        var run = function() {
+            _element.innerText = nextFrame();
 
-        setTimeout(run, _speed + revealedLettersCount());
-    };
+            setTimeout(run, _speed + revealedLettersCount());
+        };
 
-    var revealedLettersCount = function() {
-        var result = 0;
+        var revealedLettersCount = function() {
+            var result = 0;
 
-        for (var i = 0; i < _text.length; i++) {
-            if (_stopMap[i] <= _frame)
-                result++;
-        }
+            for (var i = 0; i < _text.length; i++) {
+                if (_stopMap[i] <= _frame)
+                    result++;
+            }
 
-        return result;
-    };
+            return result;
+        };
 
-    var nextFrame = function() {
-        var frameText = '';
+        var nextFrame = function() {
+            var frameText = '';
 
-        for (var i = 0; i < _text.length; i++) {
-            frameText += getLetter(_text, i);
-        }
-        _frame++;
+            for (var i = 0; i < _text.length; i++) {
+                frameText += getLetter(_text, i);
+            }
+            _frame++;
 
-        return frameText;
-    };
+            return frameText;
+        };
 
-    var getLetter = function(text, pos) {
-        if (text[pos] === ' ') {
-            return ' ';
-        }
-        if (_stopMap[pos] <= _frame) {
-            return text[pos];
-        }
+        var getLetter = function(text, pos) {
+            if (text[pos] === ' ') {
+                return ' ';
+            }
+            if (_stopMap[pos] <= _frame) {
+                return text[pos];
+            }
 
-        return randomLetter();
-    };
+            return randomLetter();
+        };
 
-    var randomLetter = function() {
-        var asciiRange = CONFIG.getDefault('ascii_max') - CONFIG.getDefault('ascii_min');
+        var randomLetter = function() {
+            var asciiRange = CONFIG.getDefault('ascii_max') - CONFIG.getDefault('ascii_min');
 
-        return String.fromCharCode(Math.floor(Math.random() * asciiRange) + CONFIG.getDefault('ascii_min'));
-    };
+            return String.fromCharCode(Math.floor(Math.random() * asciiRange) + CONFIG.getDefault('ascii_min'));
+        };
 
-    // public interface
-    return {
-        init: init
-    }
-}());
+        // public interface
+        return init;
+    }());
 
 
-// Config
-// ----------------------------------------------------------
-var CONFIG = (function() {
-    var defaults = {
-        'speed': 1,
-        'repetitions': 40,
-        'repetition_offset': 20,
-        'text': 'follow the white rabbit',
-        'ascii_min': 48,
-        'ascii_max': 122
-    };
+    // Config
+    // ----------------------------------------------------------
+    var CONFIG = (function() {
+        var defaults = {
+            'speed': 1,
+            'repetitions': 40,
+            'repetition_offset': 20,
+            'text': 'follow the white rabbit',
+            'ascii_min': 48,
+            'ascii_max': 122
+        };
 
-    return {
-        getDefault: function(name) { return defaults[name]; }
-    };
-})();
+        return {
+            getDefault: function(name) { return defaults[name]; }
+        };
+    })();
+}
