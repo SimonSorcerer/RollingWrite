@@ -1,5 +1,5 @@
-if (typeof Object.prototype.rollText !== 'function') {
-    Object.prototype.rollText = (function() {
+(function() {
+    function Roll(element, speed) {
         var _text;
         var _element;
         var _speed;
@@ -31,8 +31,8 @@ if (typeof Object.prototype.rollText !== 'function') {
             _text = (elementDefined() && _element.innerText) ? _element.innerText : CONFIG.getDefault('text');
         };
 
-        var init = function(speed) {
-            setElement(this);
+        var init = function(element, speed) {
+            setElement(element);
             setSpeed(speed);
 
             if (elementDefined()) {
@@ -55,18 +55,24 @@ if (typeof Object.prototype.rollText !== 'function') {
         var run = function() {
             _element.innerText = nextFrame();
 
-            setTimeout(run, _speed + revealedLettersCount());
+            if (!allRevealed()) {
+                setTimeout(run, _speed + revealedLettersCount());
+            }
         };
 
         var revealedLettersCount = function() {
             var result = 0;
 
             for (var i = 0; i < _text.length; i++) {
-                if (_stopMap[i] <= _frame)
+                if (_stopMap[i] < _frame)
                     result++;
             }
 
             return result;
+        };
+
+        var allRevealed = function () {
+            return revealedLettersCount() === _text.length;
         };
 
         var nextFrame = function() {
@@ -97,9 +103,9 @@ if (typeof Object.prototype.rollText !== 'function') {
             return String.fromCharCode(Math.floor(Math.random() * asciiRange) + CONFIG.getDefault('ascii_min'));
         };
 
-        // public interface
-        return init;
-    }());
+        // run initialization
+        init(element, speed);
+    }
 
 
     // Config
@@ -118,4 +124,12 @@ if (typeof Object.prototype.rollText !== 'function') {
             getDefault: function(name) { return defaults[name]; }
         };
     })();
-}
+
+
+    // create new instance on call
+    if (typeof Object.prototype.rollText !== 'function') {
+        Object.prototype.rollText = function(speed) {
+            return new Roll(this, speed);
+        }
+    }
+}());

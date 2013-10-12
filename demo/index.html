@@ -4,15 +4,24 @@
     <title>Matrix write demo</title>
     <style>
         body { font-family: "Courier New", sans-serif; }
+        h4 { font-family: "Arial", sans-serif; }
     </style>
 </head>
 
 <body>
-    <div id="demo">I am selling these fine leather jackets</div>
+    <h4>RollText example</h4>
+    <div id="roll">I am selling these fine leather jackets</div>
+    <h4>ShiftText example (without repeat)</h4>
+    <div id="shift">I have bought this beautiful red fez</div>
+    <h4>ShiftText example (with repeat)</h4>
+    <div id="shift2">My fez is full of electric eels and rotten apples</div>
 
     <script type="text/javascript" src="../rolling.js"></script>
+    <script type="text/javascript" src="../shifting.js"></script>
     <script type="text/javascript">
-        document.getElementById('demo').rollText();
+        document.getElementById('roll').rollText();
+        document.getElementById('shift').shiftText(50, false);
+        document.getElementById('shift2').shiftText(20);
     </script>
 </body>
 
