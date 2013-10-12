@@ -1,5 +1,5 @@
-if (typeof Object.prototype.rollingWrite !== 'function') {
-    Object.prototype.rollingWrite = (function() {
+if (typeof Object.prototype.roll !== 'function') {
+    Object.prototype.roll = (function() {
         var _text;
         var _element;
         var _speed;
